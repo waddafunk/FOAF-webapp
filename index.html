@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FOAF — Friend of a Friend</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init('oNFqYktcDubJW9ZL9');</script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1004,6 +1006,18 @@
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
     } catch(err) {
       console.error('Netlify form error:', err);
+    }
+
+    try {
+      await emailjs.send('service_g9zi3ve', 'template_i8fnqao', {
+        nome:     nome,
+        cognome:  document.getElementById('cognome').value.trim(),
+        email:    email,
+        citta:    document.getElementById('citta').value.trim(),
+        eta:      document.getElementById('eta').value,
+      });
+    } catch(err) {
+      console.error('EmailJS error:', err);
     }
 
     form.style.display = 'none';

@@ -1008,17 +1008,22 @@
       console.error('Netlify form error:', err);
     }
 
-    try {
-      await emailjs.send('service_g9zi3ve', 'template_i8fnqao', {
-        nome:     nome,
-        cognome:  document.getElementById('cognome').value.trim(),
-        email:    email,
-        citta:    document.getElementById('citta').value.trim(),
-        eta:      document.getElementById('eta').value,
-      });
-    } catch(err) {
-      console.error('EmailJS error:', err);
-    }
+    const payload = {
+      nome:             nome,
+      cognome:          document.getElementById('cognome').value.trim(),
+      email:            email,
+      citta:            document.getElementById('citta').value.trim(),
+      eta:              document.getElementById('eta').value,
+      source:           document.getElementById('source').value,
+      'amico-nome':     document.getElementById('amico-nome').value.trim(),
+      'amico-cognome':  document.getElementById('amico-cognome').value.trim(),
+      'amico-contatto': document.getElementById('amico-contatto').value.trim(),
+    };
+
+    await Promise.allSettled([
+      emailjs.send('service_g9zi3ve', 'template_i8fnqao', payload),
+      emailjs.send('service_g9zi3ve', 'template_e941oi9', payload),
+    ]);
 
     form.style.display = 'none';
     document.getElementById('success-msg').style.display = 'block';
